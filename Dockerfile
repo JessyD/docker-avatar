@@ -12,6 +12,7 @@ RUN apt-get update
 RUN apt-get install -y \
     build-essential \
     git \
+    htop \
     python-dev \
     python-pip \
     python \
@@ -39,5 +40,11 @@ RUN cd tvb-data && python setup.py develop install && cd ..
 # RUN git clone --branch 1.5.4 https://github.com/the-virtual-brain/tvb-framework.git
 # RUN cd tvb-framework && python setup.py develop install && cd ..
 WORKDIR /
+
+# Make sure the shell always shows that we are in a docker container.
+RUN echo "PROMPT=\"(docker) \$PROMPT\"" >> $HOME/.zshrc
+
+# Always start at home.
+WORKDIR /root
 
 ENTRYPOINT /bin/zsh
