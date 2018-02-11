@@ -18,7 +18,8 @@ RUN apt-get install -y \
     python \
     vim \
     wget \
-    zsh
+    zsh \
+    python-tk
 
 # Install oh-my-zsh
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
@@ -39,7 +40,12 @@ RUN cd tvb-data && git reset --hard 7d2d05b && cd ..
 RUN cd tvb-data && python setup.py develop install && cd ..
 # RUN git clone --branch 1.5.4 https://github.com/the-virtual-brain/tvb-framework.git
 # RUN cd tvb-framework && python setup.py develop install && cd ..
-WORKDIR /
+
+# Get my vim into the docker container
+RUN git clone https://github.com/JessyD/dot-cloud.git
+RUN ln -s /tmp/dot-cloud/vimrc /root/.vimrc
+RUN git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+RUN vim +PluginInstall +qall
 
 # Make sure the shell always shows that we are in a docker container.
 RUN echo "PROMPT=\"(docker) \$PROMPT\"" >> $HOME/.zshrc
